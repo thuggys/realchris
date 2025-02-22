@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import SnowEffect from "./SnowEffect";
 
 const CUSTOMER_AVATARS = [
   "https://api.dicebear.com/7.x/avataaars/png?seed=Felix&backgroundColor=b6e3f4",
@@ -83,29 +83,32 @@ export default function Hero() {
             </div>
 
             {/* Background Decorative Elements */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-red-100 rounded-full opacity-20 blur-3xl z-10"></div>
-              <div className="absolute top-0 right-0 w-32 h-32">
-                <Image
-                  src="/christmas-ornament.png"
-                  alt="Christmas Ornament"
-                  width={128}
-                  height={128}
-                  className="w-full h-full object-contain opacity-50"
-                />
-              </div>
-              <div className="absolute bottom-0 left-0 w-32 h-32 transform rotate-45">
-                <Image
-                  src="/christmas-bells.png"
-                  alt="Christmas Bells"
-                  width={128}
-                  height={128}
-                  className="w-full h-full object-contain opacity-50"
-                />
-              </div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-red-100 rounded-full opacity-20 blur-3xl z-10"></div>
+            <div className="absolute top-0 right-0 w-32 h-32">
+              <Image
+                src="/christmas-ornament.png"
+                alt="Christmas Ornament"
+                width={128}
+                height={128}
+                className="w-full h-full object-contain opacity-50"
+              />
+            </div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 transform rotate-45">
+              <Image
+                src="/christmas-bells.png"
+                alt="Christmas Bells"
+                width={128}
+                height={128}
+                className="w-full h-full object-contain opacity-50"
+              />
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Background Snow Effect */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        <SnowEffect />
       </div>
     </section>
   );
