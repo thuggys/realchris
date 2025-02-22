@@ -170,45 +170,44 @@ export default function Hero() {
             <div className="relative">
               {/* Main Image */}
               <div 
-                className="relative z-20 bg-white p-3 sm:p-4 md:p-6 rounded-3xl shadow-2xl transform hover:-translate-y-2 transition-transform duration-300"
-                aria-label="Decorative Christmas Display"
+                className="relative z-20 bg-white p-8 sm:p-10 md:p-12 rounded-full shadow-2xl transform hover:-translate-y-2 transition-transform duration-300 aspect-square"
+                aria-label="MI North Christmas Logo"
               >
-                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
+                <div className="relative w-full h-full rounded-full overflow-hidden bg-gray-950 backdrop-blur-sm">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black"></div>
+                  <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1),transparent)]"></div>
+                  
+                  {/* Snowfall Effect */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    {[...Array(30)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="absolute w-1 h-1 bg-white rounded-full animate-snowfall"
+                        style={{
+                          left: `${Math.random() * 100}%`,
+                          top: '-5%',
+                          opacity: 0.7,
+                          animationDelay: `${Math.random() * 5}s`,
+                          animationDuration: `${3 + Math.random() * 2}s`
+                        }}
+                      />
+                    ))}
+                  </div>
+
                   <Image
-                    src="/hero.png"
-                    alt="Festive Christmas scene with decorations"
+                    src="/logo.png"
+                    alt="MI North Christmas Logo"
                     width={800}
-                    height={1000}
-                    className="object-cover w-full h-full"
+                    height={800}
+                    className="object-contain w-full h-full p-4 relative z-10"
                     priority
                   />
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-red-900/20 to-transparent" aria-hidden="true"></div>
                 </div>
                 
-                {/* Decorative Corner Elements - Adjusted for mobile */}
-                <div className="absolute top-0 left-0 w-12 sm:w-16 md:w-20 h-12 sm:h-16 md:h-20 border-t-4 border-l-4 border-red-500 rounded-tl-3xl -translate-x-2 -translate-y-2" aria-hidden="true"></div>
-                <div className="absolute bottom-0 right-0 w-12 sm:w-16 md:w-20 h-12 sm:h-16 md:h-20 border-b-4 border-r-4 border-red-500 rounded-br-3xl translate-x-2 translate-y-2" aria-hidden="true"></div>
-              </div>
-
-              {/* Decorative Elements - Adjusted sizes and positions for mobile */}
-              <div className="floating-element absolute -top-4 right-0 w-16 sm:w-20 md:w-24 lg:w-32 h-16 sm:h-20 md:h-24 lg:h-32" aria-hidden="true">
-                <Image
-                  src="/christmas-ornament.png"
-                  alt=""
-                  width={128}
-                  height={128}
-                  className="w-full h-full object-contain opacity-50"
-                />
-              </div>
-              <div className="rotating-element absolute -bottom-4 left-0 w-16 sm:w-20 md:w-24 lg:w-32 h-16 sm:h-20 md:h-24 lg:h-32 transform rotate-45" aria-hidden="true">
-                <Image
-                  src="/christmas-bells.png"
-                  alt=""
-                  width={128}
-                  height={128}
-                  className="w-full h-full object-contain opacity-50"
-                />
+                {/* Circular Border Effect */}
+                <div className="absolute inset-0 border-4 border-red-500/40 rounded-full"></div>
+                <div className="absolute inset-2 border-2 border-red-500/30 rounded-full shadow-inner"></div>
+                <div className="absolute inset-4 border border-red-500/20 rounded-full"></div>
               </div>
             </div>
           </div>

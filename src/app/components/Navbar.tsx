@@ -45,11 +45,11 @@ export default function Navbar() {
             {/* Logo */}
             <Link 
               href="/" 
-              className="relative z-10 text-2xl font-bold text-gray-900 flex items-center gap-2"
+              className="relative z-10 text-lg font-serif tracking-wide"
               aria-label="MI North Christmas - Home"
             >
-              <span className="text-red-500">MI</span>
-              <span>North</span>
+              <span className="text-red-500">MI North</span>
+              <span className="text-gray-700"> Christmas</span>
             </Link>
 
             {/* Desktop Navigation */}
