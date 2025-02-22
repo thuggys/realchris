@@ -20,14 +20,14 @@ export default function About() {
               </p>
               
               <p>
-                We're passionate about helping others create magical holiday moments. With our 
+                We&apos;re passionate about helping others create magical holiday moments. With our 
                 carefully curated selection of Christmas decorations and gifts, we make it easy 
                 for you to transform your space into a winter wonderland.
               </p>
 
               <p>
-                Whether you're looking for traditional decorations or modern holiday accessories, 
-                we're here to help you find the perfect items to make your Christmas celebrations 
+                Whether you&apos;re looking for traditional decorations or modern holiday accessories, 
+                we&apos;re here to help you find the perfect items to make your Christmas celebrations 
                 truly special.
               </p>
             </div>
