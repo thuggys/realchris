@@ -23,9 +23,9 @@ export default function FeaturedProducts() {
 
   const categories = [
     { id: "all", name: "All" },
-    { id: "new", name: "New Arrivals" },
-    { id: "trending", name: "Trending" },
-    { id: "sale", name: "On Sale" },
+    { id: "ornaments", name: "Ornaments" },
+    { id: "lights", name: "Lighting" },
+    { id: "decor", name: "Home Decor" },
   ];
 
   useEffect(() => {
@@ -95,8 +95,8 @@ export default function FeaturedProducts() {
             <div className="lg:sticky lg:top-24 h-fit">
               <div className="relative aspect-[4/3] lg:aspect-[3/4] rounded-2xl lg:rounded-[2.5rem] overflow-hidden group">
                 <Image
-                  src="/product1.jpg"
-                  alt="Featured Product"
+                  src="/christmas-tree.jpg"
+                  alt="Premium Christmas Tree"
                   width={800}
                   height={1000}
                   className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
@@ -105,18 +105,18 @@ export default function FeaturedProducts() {
                 
                 {/* Sale Badge */}
                 <div className="absolute top-4 lg:top-8 left-4 lg:left-8 bg-red-500 text-white px-4 lg:px-6 py-2 rounded-full text-sm font-medium tracking-wider">
-                  SALE -30%
+                  SALE -25%
                 </div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-12">
                   <div className="bg-white/95 backdrop-blur-sm rounded-2xl lg:rounded-3xl p-6 lg:p-10 transform transition-transform duration-500 group-hover:translate-y-0 translate-y-2">
-                    <span className="text-red-500 uppercase tracking-widest text-sm font-medium mb-4 block">Limited Edition</span>
-                    <h3 className="text-2xl lg:text-4xl font-semibold mb-4 text-gray-900">The Signature Collection</h3>
-                    <p className="text-gray-600 mb-6 lg:mb-8 leading-relaxed">Experience luxury redefined with our signature pieces, crafted for the modern home.</p>
+                    <span className="text-red-500 uppercase tracking-widest text-sm font-medium mb-4 block">Premium Collection</span>
+                    <h3 className="text-2xl lg:text-4xl font-semibold mb-4 text-gray-900">Royal Spruce Tree</h3>
+                    <p className="text-gray-600 mb-6 lg:mb-8 leading-relaxed">A majestic 7.5ft pre-lit artificial Christmas tree with snow-dusted tips and 800 warm LED lights.</p>
                     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-0">
                       <div className="flex items-baseline gap-4">
-                        <span className="text-gray-400 line-through text-xl">$1,299</span>
-                        <span className="text-red-500 text-3xl lg:text-4xl font-bold">$999</span>
+                        <span className="text-gray-400 line-through text-xl">$599</span>
+                        <span className="text-red-500 text-3xl lg:text-4xl font-bold">$449</span>
                       </div>
                       <button className="w-full lg:w-auto bg-red-500 text-white px-6 lg:px-8 py-3 rounded-2xl hover:bg-red-600 transition-all duration-300 hover:shadow-xl hover:shadow-red-500/20 transform hover:-translate-y-0.5">
                         Shop Collection
@@ -134,11 +134,11 @@ export default function FeaturedProducts() {
             <div ref={headerRef} className="mb-8 lg:mb-16">
               <div className="flex items-center gap-4 mb-4">
                 <span className="h-[2px] w-12 bg-red-500" />
-                <span className="text-red-500 uppercase tracking-[0.2em] text-sm font-medium">Curated Selection</span>
+                <span className="text-red-500 uppercase tracking-[0.2em] text-sm font-medium">Holiday Magic</span>
               </div>
-              <h2 className="text-4xl lg:text-6xl font-semibold mb-6 lg:mb-8 leading-tight">Featured<br className="hidden lg:block" /> Products</h2>
+              <h2 className="text-4xl lg:text-6xl font-semibold mb-6 lg:mb-8 leading-tight">Featured<br className="hidden lg:block" /> Decorations</h2>
               <p className="text-gray-600 max-w-2xl text-base lg:text-lg leading-relaxed">
-                Discover our carefully curated selection of premium furniture pieces, designed to elevate your living space.
+                Transform your home into a winter wonderland with our premium selection of Christmas decorations and ornaments.
               </p>
             </div>
 
@@ -162,36 +162,36 @@ export default function FeaturedProducts() {
             {/* Products Grid */}
             <div ref={productsRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
               <ProductCard
-                image="/product2.jpg"
-                title="Modern Lounge Chair"
-                description="Contemporary design with exceptional comfort"
-                originalPrice={599}
-                discountedPrice={499}
-                category="new"
+                image="/ornament-set.jpg"
+                title="Vintage Glass Ornaments"
+                description="Set of 24 hand-painted glass ornaments in traditional holiday colors"
+                originalPrice={89}
+                discountedPrice={69}
+                category="ornaments"
               />
               <ProductCard
-                image="/product3.jpg"
-                title="Artisan Coffee Table"
-                description="Handcrafted from sustainable materials"
-                originalPrice={799}
-                discountedPrice={649}
-                category="trending"
+                image="/fairy-lights.jpg"
+                title="Twinkle Light Curtain"
+                description="300 LED warm white icicle lights with 8 magical lighting modes"
+                originalPrice={79}
+                discountedPrice={59}
+                category="lights"
               />
               <ProductCard
-                image="/product4.jpg"
-                title="Minimalist Shelf"
-                description="Sleek storage solution for modern homes"
-                originalPrice={399}
-                discountedPrice={299}
-                category="sale"
+                image="/wreath.jpg"
+                title="Luxury Pine Wreath"
+                description="30-inch pre-lit wreath with pine cones and red berries"
+                originalPrice={129}
+                discountedPrice={99}
+                category="decor"
               />
               <ProductCard
-                image="/product5.jpg"
-                title="Designer Lamp"
-                description="Ambient lighting with artistic flair"
-                originalPrice={249}
-                discountedPrice={199}
-                category="new"
+                image="/garland.jpg"
+                title="Premium Garland Set"
+                description="9ft battery-operated LED garland with frosted pine cones"
+                originalPrice={69}
+                discountedPrice={49}
+                category="decor"
               />
             </div>
 
