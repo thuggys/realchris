@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import SnowEffect from "./SnowEffect";
 
 const CUSTOMER_AVATARS = [
   "https://api.dicebear.com/7.x/avataaars/png?seed=Felix&backgroundColor=b6e3f4",
@@ -104,11 +103,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Background Snow Effect */}
-      <div className="absolute inset-0 pointer-events-none opacity-30">
-        <SnowEffect />
       </div>
     </section>
   );
