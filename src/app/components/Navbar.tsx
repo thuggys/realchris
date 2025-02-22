@@ -34,7 +34,7 @@ export default function Navbar() {
   return (
     <>
       <nav 
-        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           hasScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
         }`}
         role="navigation"
@@ -69,18 +69,6 @@ export default function Navbar() {
                   </Link>
                 ))}
               </div>
-              
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2 ml-4">
-                <button 
-                  className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-                  aria-label="Search"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
-              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -98,23 +86,27 @@ export default function Navbar() {
             </button>
           </div>
         </div>
+      </nav>
+      
+      {/* Extra space for fixed navbar */}
+      <div className="h-24 sm:h-28" />
 
+      {/* Mobile Menu - Outside nav */}
+      <div className={`lg:hidden fixed inset-0 z-[100] ${isOpen ? '' : 'pointer-events-none'}`}>
         {/* Mobile Menu Overlay */}
         <div 
-          className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-            isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+            isOpen ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{ zIndex: 40 }}
           aria-hidden={!isOpen}
           onClick={() => setIsOpen(false)}
         />
         
         {/* Mobile Menu Panel */}
         <div 
-          className={`fixed inset-y-0 right-0 w-[min(100vw,400px)] bg-white shadow-2xl transition-transform duration-500 ease-out lg:hidden ${
+          className={`fixed inset-y-0 right-0 w-[min(100vw,400px)] bg-white shadow-2xl transition-transform duration-500 ease-out ${
             isOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
-          style={{ zIndex: 45 }}
         >
           <div className="flex flex-col h-full">
             {/* Mobile Menu Header */}
@@ -150,22 +142,6 @@ export default function Navbar() {
                   </Link>
                 ))}
               </div>
-
-              {/* Quick Actions */}
-              <div className="p-6 bg-gray-50">
-                <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider mb-4">Quick Actions</h3>
-                <div className="space-y-3">
-                  <button 
-                    className="flex items-center w-full px-4 py-3 gap-3 text-gray-700 bg-white rounded-xl hover:bg-gray-100 transition-colors shadow-sm"
-                    aria-label="Search products"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <span className="font-medium">Search Products</span>
-                  </button>
-                </div>
-              </div>
             </div>
 
             {/* Mobile Menu Footer */}
@@ -178,10 +154,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </nav>
-      
-      {/* Extra space for fixed navbar */}
-      <div className="h-24 sm:h-28" />
+      </div>
     </>
   );
 } 
