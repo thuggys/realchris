@@ -107,18 +107,17 @@ export default function Hero() {
                 className="welcome-text inline-block text-red-500 font-medium tracking-wider uppercase text-xs sm:text-sm mb-2 sm:mb-3" 
                 aria-label="Welcome message"
               >
-                Welcome to
+                Welcome to our collection
               </span>
-              <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-[1.1]" aria-label="MI North Christmas Magic">
-                <span className="title-text block text-gray-900 font-light">MI North</span>
-                <span className="title-text block text-red-500 font-bold mt-1 sm:mt-2">Christmas</span>
+              <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-[1.1]" aria-label="Holiday Magic Collection">
+                <span className="title-text block text-gray-900 font-light">Discover</span>
+                <span className="title-text block text-red-500 font-bold mt-1 sm:mt-2">Holiday</span>
                 <span className="title-text block text-gray-800 font-light mt-1 sm:mt-2">Magic</span>
               </h1>
             </div>
 
             <p className="content-anim text-gray-600 text-base sm:text-lg md:text-xl font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Discover our enchanting collection of handcrafted Christmas decorations, 
-              bringing the warmth and joy of the holiday season to your home.
+              Transform your home into a winter wonderland with our enchanting collection of handcrafted Christmas decorations.
             </p>
 
             <div className="content-anim flex flex-col sm:flex-row justify-center lg:justify-start gap-3 sm:gap-4">

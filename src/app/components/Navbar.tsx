@@ -42,15 +42,6 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center h-20">
-            {/* Logo */}
-            <Link 
-              href="/" 
-              className="relative z-10 text-lg font-serif tracking-wide"
-              aria-label="MI North Christmas - Home"
-            >
-              <span className="text-red-500">MI North</span>
-              <span className="text-gray-700"> Christmas</span>
-            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-2">
