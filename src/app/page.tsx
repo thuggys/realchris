@@ -6,7 +6,7 @@ import Footer from "./components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-pink-50">
+    <main className="min-h-screen bg-gradient-to-b from-white to-pink-50 overflow-x-hidden">
       <Navigation />
       <Hero />
       <About />
