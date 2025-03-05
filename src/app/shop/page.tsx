@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -8,6 +8,11 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+
+// Register ScrollTrigger plugin
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface Product {
   id: string;
@@ -21,7 +26,54 @@ interface Product {
   isNew?: boolean;
 }
 
+// Main Shop page component
 export default function Shop() {
+  return (
+    <div className="bg-background min-h-screen">
+      <Navbar />
+      <Suspense fallback={<ShopSkeleton />}>
+        <ShopContent />
+      </Suspense>
+      <Footer />
+    </div>
+  );
+}
+
+// Loading skeleton component
+function ShopSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="animate-pulse">
+        {/* Hero skeleton */}
+        <div className="h-64 bg-gray-200 rounded-3xl mb-8"></div>
+        
+        {/* Categories skeleton */}
+        <div className="flex gap-4 mb-8">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="h-10 w-24 bg-gray-200 rounded-full"></div>
+          ))}
+        </div>
+        
+        {/* Products grid skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+            <div key={i} className="bg-white rounded-lg overflow-hidden shadow-sm">
+              <div className="h-48 bg-gray-200"></div>
+              <div className="p-4">
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+                <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Main content component that uses useSearchParams
+function ShopContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
   
@@ -191,9 +243,7 @@ export default function Shop() {
   };
 
   return (
-    <div className="bg-background min-h-screen">
-      <Navbar />
-      
+    <>
       {/* Hero Section - MI North Christmas Style */}
       <section className="relative bg-[#FFF9F0] rounded-3xl mx-auto max-w-7xl mt-8 overflow-hidden border-2 border-red-100">
         {/* Decorative Christmas Corner Elements */}
@@ -473,9 +523,7 @@ export default function Shop() {
           </nav>
         </div>
       </section>
-      
-      <Footer />
-    </div>
+    </>
   );
 }
 
