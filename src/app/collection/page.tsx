@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense, useMemo } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '../components/Navbar';
@@ -88,7 +88,6 @@ function CollectionContent() {
   
   const [activeCollection, setActiveCollection] = useState(collectionParam || 'seasonal');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [particles, setParticles] = useState<Particle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const headerRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
@@ -109,6 +108,25 @@ function CollectionContent() {
     
     return () => clearTimeout(timer);
   }, []);
+  
+  // Generate particles with useMemo for better performance
+  const particles = useMemo(() => {
+    const newParticles: Particle[] = [];
+    const count = activeCollection === 'seasonal' ? 40 : 25;
+    
+    for (let i = 0; i < count; i++) {
+      newParticles.push({
+        x: Math.random() * 100, // percentage across screen
+        y: Math.random() * 100, // percentage down screen
+        size: Math.random() * 8 + 2, // size between 2-10px
+        opacity: Math.random() * 0.5 + 0.3, // opacity between 0.3-0.8
+        speed: Math.random() * 3 + 1, // animation speed multiplier
+        id: i,
+      });
+    }
+    
+    return newParticles;
+  }, [activeCollection]);
   
   // Sample collection data
   const collections = {
@@ -134,28 +152,6 @@ function CollectionContent() {
       motif: "twinkle"
     }
   };
-
-  // Generate particles (snowflakes, sparkles, etc.) based on active collection
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    // Generate new particles
-    const newParticles: Particle[] = [];
-    const count = activeCollection === 'seasonal' ? 40 : 25;
-    
-    for (let i = 0; i < count; i++) {
-      newParticles.push({
-        x: Math.random() * 100, // percentage across screen
-        y: Math.random() * 100, // percentage down screen
-        size: Math.random() * 8 + 2, // size between 2-10px
-        opacity: Math.random() * 0.5 + 0.3, // opacity between 0.3-0.8
-        speed: Math.random() * 3 + 1, // animation speed multiplier
-        id: i,
-      });
-    }
-    
-    setParticles(newParticles);
-  }, [activeCollection]);
 
   // Example product data - in a real app, this would come from an API
   const products: Product[] = [
@@ -334,59 +330,97 @@ function CollectionContent() {
     return () => clearTimeout(timer);
   }, [activeCollection]);
 
-  // Mouse parallax effect for hero
+  // Mouse parallax effect for hero - optimized with debouncing
   useEffect(() => {
     if (isLoading || typeof window === 'undefined' || !productsRef.current) return;
     
+    let requestId: number;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let isThrottled = false;
+    
     const handleMouseMove = (e: MouseEvent) => {
-      const mouseX = e.clientX / window.innerWidth;
-      const mouseY = e.clientY / window.innerHeight;
+      if (isThrottled) return;
       
-      const moveX = (mouseX - 0.5) * 20; // -10px to 10px
-      const moveY = (mouseY - 0.5) * 20; // -10px to 10px
+      // Throttle the mouse move handler
+      isThrottled = true;
+      setTimeout(() => { isThrottled = false; }, 16); // ~60fps
       
-      const bgImage = productsRef.current?.querySelector('.hero-bg-image');
-      const particles = productsRef.current?.querySelector('.particles-container');
-      const headerContent = headerRef.current;
+      const { clientX, clientY } = e;
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
       
-      if (bgImage) {
-        gsap.to(bgImage, {
-          x: -moveX,
-          y: -moveY,
-          duration: 1,
-          ease: "power2.out"
-        });
+      // Calculate mouse position as percentage of window (-0.5 to 0.5)
+      const mouseX = (clientX / windowWidth) - 0.5;
+      const mouseY = (clientY / windowHeight) - 0.5;
+      
+      lastMouseX = mouseX;
+      lastMouseY = mouseY;
+      
+      if (requestId) {
+        cancelAnimationFrame(requestId);
       }
       
-      if (particles) {
-        gsap.to(particles, {
-          x: moveX / 3,
-          y: moveY / 3,
-          duration: 1.5,
-          ease: "power2.out"
-        });
-      }
-      
-      if (headerContent) {
-        gsap.to(headerContent, {
-          x: moveX / 8,
-          y: moveY / 8,
-          duration: 1.2,
-          ease: "power2.out"
-        });
-      }
+      requestId = requestAnimationFrame(() => {
+        // Calculate movement amount (px)
+        const moveX = lastMouseX * 20; // -10px to 10px
+        const moveY = lastMouseY * 20; // -10px to 10px
+        
+        const bgImage = productsRef.current?.querySelector('.hero-bg-image');
+        const particles = productsRef.current?.querySelector('.particles-container');
+        const headerContent = headerRef.current;
+        
+        // Apply parallax effect with GSAP for smoother performance
+        if (bgImage) {
+          gsap.to(bgImage, {
+            x: moveX * -1.5, // Move opposite direction of mouse for background
+            y: moveY * -1.5,
+            duration: 1,
+            ease: "power2.out"
+          });
+        }
+        
+        if (particles) {
+          gsap.to(particles, {
+            x: moveX * 0.5, // Subtle movement for particles
+            y: moveY * 0.5,
+            duration: 1.2,
+            ease: "power2.out"
+          });
+        }
+        
+        if (headerContent) {
+          gsap.to(headerContent, {
+            x: moveX * 0.8, // More noticeable movement for header
+            y: moveY * 0.8,
+            duration: 1.5,
+            ease: "power2.out"
+          });
+        }
+      });
     };
     
     window.addEventListener('mousemove', handleMouseMove);
     
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      if (requestId) {
+        cancelAnimationFrame(requestId);
+      }
     };
   }, [isLoading]);
 
-  // Switch collection
+  // Optimized collection change handler
   const handleCollectionChange = (collection: string) => {
+    if (collection === activeCollection) return;
+    
     setActiveCollection(collection);
+    
+    // Scroll to top with smooth animation
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
   return (
@@ -682,50 +716,34 @@ function CollectionContent() {
                   <div className="relative overflow-hidden rounded-lg mb-4 bg-gray-50">
                     {/* Product Image */}
                     <div className="aspect-[3/4] relative">
-                      <Image
+                      <Image 
                         src={product.image}
                         alt={product.title}
                         fill
-                        className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                        style={{ objectFit: 'cover' }}
+                        className="transition-transform duration-300 group-hover:scale-105"
                       />
                       
                       {/* Overlay on hover */}
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       
-                      {/* Quick view button */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                        <button 
-                          className={`w-full py-2.5 rounded-md text-white text-sm font-medium transition-colors ${
-                            activeCollection === 'seasonal' ? 'bg-blue-600 hover:bg-blue-700' :
-                            activeCollection === 'limited' ? 'bg-amber-600 hover:bg-amber-700' :
-                            'bg-emerald-600 hover:bg-emerald-700'
-                          }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedProduct(product);
-                          }}
-                        >
-                          Quick View
-                        </button>
+                      {/* Product Labels */}
+                      <div className="absolute top-3 left-3 flex flex-col gap-2">
+                        {product.isNew && (
+                          <span className={`px-3 py-1 text-xs font-medium rounded-full ${
+                            activeCollection === 'seasonal' ? 'bg-blue-100 text-blue-800' :
+                            activeCollection === 'limited' ? 'bg-amber-100 text-amber-800' :
+                            'bg-emerald-100 text-emerald-800'
+                          }`}>
+                            New
+                          </span>
+                        )}
+                        {product.isFeatured && (
+                          <span className="px-3 py-1 bg-black text-white text-xs font-medium rounded-full">
+                            Featured
+                          </span>
+                        )}
                       </div>
-                    </div>
-                    
-                    {/* Product Labels */}
-                    <div className="absolute top-3 left-3 flex flex-col gap-2">
-                      {product.isNew && (
-                        <span className={`px-3 py-1 text-xs font-medium rounded-full ${
-                          activeCollection === 'seasonal' ? 'bg-blue-100 text-blue-800' :
-                          activeCollection === 'limited' ? 'bg-amber-100 text-amber-800' :
-                          'bg-emerald-100 text-emerald-800'
-                        }`}>
-                          New
-                        </span>
-                      )}
-                      {product.isFeatured && (
-                        <span className="px-3 py-1 bg-black text-white text-xs font-medium rounded-full">
-                          Featured
-                        </span>
-                      )}
                     </div>
                   </div>
                   
@@ -886,15 +904,6 @@ function CollectionContent() {
                     </div>
                     
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-3">Quantity</h3>
-                      <div className="flex border border-gray-300 rounded-md w-32">
-                        <button className="px-3 py-1 text-gray-600 hover:bg-gray-100">-</button>
-                        <div className="flex-1 text-center py-1">1</div>
-                        <button className="px-3 py-1 text-gray-600 hover:bg-gray-100">+</button>
-                      </div>
-                    </div>
-                    
-                    <div>
                       <h3 className="text-sm font-medium text-gray-900 mb-3">Highlights</h3>
                       <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
                         <li>Hand-crafted with premium materials</li>
@@ -907,24 +916,8 @@ function CollectionContent() {
                 </div>
                 
                 <div className="pt-6 mt-6 border-t border-gray-200">
-                  <button 
-                    className={`w-full py-3 rounded-md text-white font-medium text-base transition-colors ${
-                      activeCollection === 'seasonal' ? 'bg-blue-600 hover:bg-blue-700' :
-                      activeCollection === 'limited' ? 'bg-amber-600 hover:bg-amber-700' :
-                      'bg-emerald-600 hover:bg-emerald-700'
-                    }`}
-                  >
-                    Add to Cart
-                  </button>
-                  
-                  <div className="flex justify-between mt-4">
-                    <button className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
-                      Save to Wishlist
-                    </button>
-                    <button className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1">
+                  <div className="flex justify-center mt-4">
+                    <button className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1.5 px-4 py-2 rounded-full hover:bg-gray-100 transition-colors">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                       </svg>
