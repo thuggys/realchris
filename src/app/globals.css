@@ -1,10 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html, body {
   overflow-x: hidden;
+}
+
+/* Page spacing utility for fixed navbar */
+.pt-navbar {
+  padding-top: 102px; /* Default for desktop: accounts for navbar + banner */
+}
+
+@media (max-width: 768px) {
+  .pt-navbar {
+    padding-top: 116px; /* Slightly more on mobile for taller navbar */
+  }
+}
+
+/* Collection tab animations */
+@keyframes tab-shimmer {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes tab-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes tab-shine {
+  0% {
+    transform: translateX(-100%) rotate(20deg);
+  }
+  100% {
+    transform: translateX(150%) rotate(20deg);
+  }
 }
 
 @keyframes snowfall {
@@ -24,9 +64,258 @@ html, body {
   }
 }
 
+@keyframes sparkle {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.1;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes float-reverse {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(3deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes pulse-light {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom animation classes */
+.animate-snowfall {
+  animation: snowfall 10s linear infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 4s ease-in-out infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-tab-shimmer {
+  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: tab-shimmer 2s infinite;
+}
+
+.animate-tab-pulse {
+  animation: tab-pulse 2s ease-in-out infinite;
+}
+
+.animate-tab-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  animation: tab-shine 3s infinite;
+  pointer-events: none;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+.animation-delay-700 {
+  animation-delay: 700ms;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.star-shape {
+  clip-path: polygon(
+    50% 0%, 
+    61% 35%, 
+    98% 35%, 
+    68% 57%, 
+    79% 91%, 
+    50% 70%, 
+    21% 91%, 
+    32% 57%, 
+    2% 35%, 
+    39% 35%
+  );
+}
+
+/* Makes particles responsive to pointer events */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Add perspective for 3D effects */
+.perspect-700 {
+  perspective: 700px;
+}
+
 @layer utilities {
-  .animate-snowfall {
-    animation: snowfall linear infinite;
+  .text-gradient {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+  
+  .rotate-y-12 {
+    transform: rotateY(12deg);
+  }
+  
+  .font-dancing {
+    font-family: 'Dancing Script', cursive;
+  }
+
+  .font-serif {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+/* Modal animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.35s ease-out forwards;
+}
+
+/* Custom scrollbar for modal content */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Mobile navigation enhancements */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-dropdown {
+  animation: slideDown 0.25s ease-out forwards;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure proper rendering of navbar background */
+.navbar-backdrop {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Fix for iOS Safari notch spacing */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-padding-top {
+    padding-top: env(safe-area-inset-top);
   }
 }
 

@@ -1,19 +1,22 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { gsap } from 'gsap';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
 
   // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setHasScrolled(window.scrollY > 20);
     };
+    setHasScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -23,138 +26,183 @@ export default function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
+  // Navbar animation on load
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from('.nav-logo', {
+        x: -20,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power2.out'
+      });
+      
+      gsap.from('.nav-link', {
+        y: -10,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.5,
+        ease: 'power2.out',
+        delay: 0.2
+      });
+      
+      gsap.from('.join-button', {
+        scale: 0.9,
+        opacity: 0,
+        duration: 0.5,
+        ease: 'back.out(1.5)',
+        delay: 0.5
+      });
+    }, navRef);
+    
+    return () => ctx.revert();
+  }, []);
+
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/shop', label: 'Shop' },
     { href: '/collection', label: 'Collection' },
-    { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
   ];
 
   return (
     <>
+      <style jsx global>{`
+        @media (max-width: 1023px) {
+          .desktop-nav {
+            display: none !important;
+          }
+        }
+        @media (min-width: 1024px) {
+          .mobile-nav-btn {
+            display: none !important;
+          }
+          .mobile-nav {
+            display: none !important;
+          }
+        }
+      `}</style>
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          hasScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
-        }`}
+        ref={navRef}
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+          hasScrolled ? 'bg-[#FFF9F0]/95 navbar-backdrop shadow-sm' : 'bg-white/95 md:bg-transparent'
+        } safe-padding-top`}
         role="navigation"
         aria-label="Main navigation"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex justify-between items-center h-24 sm:h-28">
+        {/* Top Holiday Banner */}
+        <div className="bg-gradient-to-r from-red-700 via-red-600 to-red-700 py-1.5 text-center text-white text-sm font-medium px-4">
+          <p>🎄 Holiday Special: Free Shipping on Orders Over $50 🎄</p>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
             {/* Logo */}
             <Link 
               href="/" 
-              className="relative z-10 text-lg sm:text-xl font-serif tracking-wide ml-0"
+              className="nav-logo relative z-10 flex items-center"
               aria-label="MI North Christmas - Home"
             >
-              <span className="text-red-500">MI North</span>
-              <span className="text-gray-700"> Christmas</span>
+              <div className="flex flex-col">
+                <h1 className="flex items-center text-[#222]">
+                  <span className="font-serif text-2xl font-bold tracking-tight">
+                    <span className="text-red-600">MI</span><span>NORTH</span>
+                  </span>
+                </h1>
+                <div className="flex items-center">
+                  <div className="h-0.5 w-7 bg-red-500 mr-2"></div>
+                  <span className="text-xs text-red-600 uppercase tracking-widest font-medium">Christmas</span>
+                </div>
+              </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-2">
-              <div className="flex items-center bg-white/50 backdrop-blur-sm px-6 py-3 rounded-full shadow-sm">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-full hover:text-red-500 ${
-                      pathname === link.href 
-                        ? 'text-red-500 after:absolute after:bottom-0 after:left-2 after:right-2 after:h-0.5 after:bg-red-500 after:rounded-full' 
-                        : 'text-gray-600'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+            {/* Desktop Navigation - Center */}
+            <div className="hidden md:flex items-center space-x-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`nav-link font-medium text-[#222] hover:text-red-600 transition-colors ${
+                    pathname === link.href 
+                      ? 'text-red-600 font-semibold' 
+                      : ''
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="lg:hidden relative z-50 w-12 h-12 flex items-center justify-center rounded-full bg-white/80 hover:bg-white backdrop-blur-sm shadow-lg transition-all duration-300 focus:outline-none"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-expanded={isOpen}
-              aria-label="Toggle menu"
-            >
-              <div className="relative w-6 h-5">
-                <span className={`absolute w-6 h-0.5 bg-gray-800 transform transition-all duration-300 ease-in-out ${isOpen ? 'rotate-45 top-2' : 'top-0'}`} />
-                <span className={`absolute w-4 right-0 h-0.5 bg-gray-800 top-2 transition-all duration-300 ease-in-out ${isOpen ? 'opacity-0 w-0' : 'opacity-100'}`} />
-                <span className={`absolute w-6 h-0.5 bg-gray-800 transform transition-all duration-300 ease-in-out ${isOpen ? '-rotate-45 top-2' : 'top-4'}`} />
-              </div>
-            </button>
+            {/* Right Side Actions */}
+            <div className="flex items-center space-x-4">
+              {/* Join Now Button */}
+              <Link
+                href="/join"
+                className="join-button hidden md:inline-flex bg-red-600 text-white px-6 py-2 rounded-full font-medium hover:bg-red-700 transition-colors shadow-md hover:shadow-lg"
+              >
+                Join Now
+              </Link>
+
+              {/* Mobile Menu Toggle Button */}
+              <button
+                className="md:hidden flex items-center justify-center w-10 h-10 text-gray-800"
+                onClick={() => setIsOpen(!isOpen)}
+                aria-expanded={isOpen}
+                aria-label="Toggle menu"
+              >
+                {isOpen ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
+          
+          {/* Mobile Navigation - Dropdown mode */}
+          {isOpen && (
+            <div 
+              className="md:hidden absolute left-0 right-0 top-full bg-white shadow-lg rounded-b-lg border-t border-gray-100 mobile-nav-dropdown z-[101]"
+              style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'auto' }}
+            >
+              <div className="px-6 py-6">
+                <ul className="space-y-5">
+                  {navLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className={`block py-2 px-3 rounded-lg text-[#222] hover:bg-red-50 hover:text-red-600 transition-colors ${
+                          pathname === link.href 
+                            ? 'bg-red-50 text-red-600 font-semibold' 
+                            : 'font-medium'
+                        }`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                  <li className="pt-2 flex justify-center">
+                    <Link
+                      href="/join"
+                      className="inline-flex bg-red-600 text-white px-8 py-3 rounded-full font-medium hover:bg-red-700 transition-colors shadow-md w-full justify-center"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Join Now
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
       
-      {/* Extra space for fixed navbar */}
-      <div className="h-24 sm:h-28" />
-
-      {/* Mobile Menu - Outside nav */}
-      <div className={`lg:hidden fixed inset-0 z-[100] ${isOpen ? '' : 'pointer-events-none'}`}>
-        {/* Mobile Menu Overlay */}
-        <div 
-          className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
-            isOpen ? 'opacity-100' : 'opacity-0'
-          }`}
-          aria-hidden={!isOpen}
-          onClick={() => setIsOpen(false)}
-        />
-        
-        {/* Mobile Menu Panel */}
-        <div 
-          className={`fixed inset-y-0 right-0 w-[min(100vw,400px)] bg-white shadow-2xl transition-transform duration-500 ease-out ${
-            isOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
-          <div className="flex flex-col h-full">
-            {/* Mobile Menu Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <span className="text-xl font-serif">Menu</span>
-              <button
-                className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-                onClick={() => setIsOpen(false)}
-                aria-label="Close menu"
-              >
-                <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Mobile Menu Content */}
-            <div className="flex-1 overflow-y-auto">
-              {/* Navigation Links */}
-              <div className="p-6 space-y-2">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`flex items-center px-4 py-3 text-lg font-medium rounded-xl transition-all duration-300 ${
-                      pathname === link.href 
-                        ? 'bg-red-50 text-red-500' 
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Mobile Menu Footer */}
-            <div className="p-6 bg-gray-50 border-t border-gray-100">
-              <button 
-                className="w-full py-3 px-4 rounded-xl bg-red-500 text-white font-medium hover:bg-red-600 transition-all duration-300 shadow-lg shadow-red-500/20 hover:shadow-red-500/30 hover:-translate-y-0.5"
-              >
-                Shop Now
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Space to compensate for fixed navbar */}
+      <div className="h-[72px] md:h-[84px]"></div>
     </>
   );
 } 

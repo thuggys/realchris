@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -35,23 +36,24 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
             <ul className="space-y-4">
+              <FooterLink href="/" text="Home" />
+              <FooterLink href="/shop" text="Shop" />
               <FooterLink href="#" text="About Us" />
               <FooterLink href="#" text="Contact" />
               <FooterLink href="#" text="FAQs" />
-              <FooterLink href="#" text="Size Guide" />
               <FooterLink href="#" text="Shipping Info" />
             </ul>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="text-lg font-semibold mb-6">Categories</h3>
+            <h3 className="text-lg font-semibold mb-6">Shop Categories</h3>
             <ul className="space-y-4">
-              <FooterLink href="#" text="Women" />
-              <FooterLink href="#" text="Men" />
-              <FooterLink href="#" text="Accessories" />
-              <FooterLink href="#" text="New Arrivals" />
-              <FooterLink href="#" text="Sale" />
+              <FooterLink href="/shop" text="All Products" />
+              <FooterLink href="/shop?category=ornaments" text="Ornaments" />
+              <FooterLink href="/shop?category=lights" text="Lighting" />
+              <FooterLink href="/shop?category=decor" text="Home Decor" />
+              <FooterLink href="/shop?category=new" text="New Arrivals" />
             </ul>
           </div>
 
