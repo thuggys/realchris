@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import MouseFollower from "mouse-follower";
 
 const CUSTOMER_AVATARS = [
   "https://api.dicebear.com/7.x/avataaars/png?seed=Felix&backgroundColor=b6e3f4",
@@ -17,7 +16,6 @@ export default function Hero() {
   const heroRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const [isClient, setIsClient] = useState(false);
-  const cursorInitialized = useRef(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -25,9 +23,6 @@ export default function Hero() {
     // Register GSAP plugins
     gsap.registerPlugin(ScrollTrigger);
     
-    // Remove the problematic MouseFollower initialization
-    // We'll handle it differently
-
     const ctx = gsap.context(() => {
       // Welcome text animation
       gsap.from(".welcome-text", {
@@ -128,7 +123,6 @@ export default function Hero() {
 
     return () => {
       ctx.revert();
-      // No need to destroy cursor here since we're not initializing it
     };
   }, []);
 

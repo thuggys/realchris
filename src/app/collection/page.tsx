@@ -42,7 +42,6 @@ export default function Collection() {
   
   const [activeCollection, setActiveCollection] = useState<string>(initialCollection);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [particles, setParticles] = useState<Particle[]>([]);
