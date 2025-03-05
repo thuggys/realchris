@@ -90,11 +90,7 @@ function CollectionContent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number | null>(null);
-  const lastTimeRef = useRef<number>(0);
   const headerRef = useRef<HTMLDivElement>(null);
-  const tabsRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   
   // Update active collection when URL parameter changes
