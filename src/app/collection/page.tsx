@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -685,7 +684,7 @@ export default function Collection() {
                       >
                         {product.title}
                       </h3>
-                      <p className="text-sm text-gray-500 mb-2 line-clamp-2">{product.description}</p>
+                      <p className="text-gray-600 mb-2 line-clamp-2">{product.description}</p>
                       <div className="flex items-center gap-2">
                         <span className="font-semibold">${product.discountedPrice}</span>
                         <span className="text-sm text-gray-500 line-through">${product.originalPrice}</span>
@@ -725,9 +724,9 @@ export default function Collection() {
                 }`}></div>
                 
                 <div className="relative z-10 text-center">
-                  <h2 className="text-3xl md:text-4xl font-cursive mb-4 text-gray-900">Join Our Collector's Circle</h2>
+                  <h2 className="text-3xl md:text-4xl font-cursive mb-4 text-gray-900">Join Our Collector&apos;s Circle</h2>
                   <p className="text-gray-600 text-lg mb-8 max-w-xl mx-auto">
-                    Be the first to know about new collections, limited edition releases, and exclusive collector's events.
+                    Be the first to know about new collections, limited edition releases, and exclusive collector&apos;s events.
                   </p>
                   
                   <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
